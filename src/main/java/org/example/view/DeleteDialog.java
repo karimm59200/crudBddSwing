@@ -59,12 +59,15 @@ public class DeleteDialog  extends JDialog  {
 
                 int id = Integer.parseInt(idField.getText());
                 ContactDao contactDao = new ContactDao();
-                contactDao.deleteContact(id);
-                System.out.println("ok");
-                // si suppression ok alors message de confirmation
-                JOptionPane.showMessageDialog(null, "Contact supprimé", "Delete", JOptionPane.INFORMATION_MESSAGE);
-                // si suppression pas ok alors message d'erreur
-                JOptionPane.showMessageDialog(null, "Contact non supprimé", "Delete", JOptionPane.ERROR_MESSAGE);
+                if(contactDao.deleteContact(id)>0){
+                    // si suppression ok alors message de confirmation
+                    JOptionPane.showMessageDialog(null, "Contact supprimé", "Delete", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    // si suppression pas ok alors message d'erreur
+                    JOptionPane.showMessageDialog(null, "Contact non supprimé", "Delete", JOptionPane.ERROR_MESSAGE);
+
+                }
+
             }
         });
 //        cancelButton.addActionListener(this);

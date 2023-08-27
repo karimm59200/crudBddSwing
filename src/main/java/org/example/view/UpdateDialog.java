@@ -53,8 +53,8 @@ public class UpdateDialog extends JDialog {
         cancelButton.setBounds(150, 150, 80, 20);
         jPanel.add(cancelButton);
 
-        JButton SearchButton = new JButton("Search");
-        SearchButton.setBounds(200, 20, 80, 20);
+
+        searchButton.setBounds(200, 20, 80, 20);
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,7 +64,7 @@ public class UpdateDialog extends JDialog {
                 numberField.setText(contact.getNumber());
             }
         });
-        jPanel.add(SearchButton);
+        jPanel.add(searchButton);
 
         idField = new JTextField();
         idField.setBounds(80, 20,80, 20);
@@ -108,29 +108,13 @@ public class UpdateDialog extends JDialog {
             }
         });
 
-
-//            Contact contact = contactDao.findById(Integer.parseInt(idField.getText()));
-//            System.out.println(contact);
-//            if(contact == null) {
-//                JOptionPane.showMessageDialog(null, "Contact not found");
-//                return;
-//            } else {
-//                //JOptionPane.showMessageDialog(null, "Contact found");
-//                nameField.setText(contact.getName());
-//                numberField.setText(contact.getNumber());
-//            }
-//            }
-//
-//    });
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
 
         }
-
-
-//        cancelButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                dispose();
-//            }
-//        });
     }
-//}
+

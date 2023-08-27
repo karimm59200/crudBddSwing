@@ -1,66 +1,95 @@
 package org.example.view;
 
+import org.example.dao.ContactDao;
+import org.example.model.Contact;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
 
 public class MessageDialog extends JDialog {
 
-    private JTable table1;
-    private JButton OkButton;
+    private JPanel mainPanel;
+
+    private JPanel buttonPanel;
+    private JPanel tablePanel;
+    private JTable table;
+    private JButton okButton;
+
+    private JFrame frame;
 
     public static void main(String[] args) {
-        MessageDialog messageDialog = new MessageDialog();
-        messageDialog.setVisible(true);
+        new MessageDialog();
     }
 
     public MessageDialog() {
 
-        table1 = new JTable();
-        OkButton = new JButton("OK");
+        frame = new JFrame("Message");
+        frame.setBounds(500,100,600,500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel jPanel = new JPanel();
-        setTitle("Message");
-        setBounds(100,100, 500,600);
-        getContentPane().setLayout(new BorderLayout());
+        mainPanel = new JPanel(new BorderLayout());
+        tablePanel = new JPanel(new BorderLayout()); // Crée un panneau avec un layout BorderLayout
 
-        JButton OkButton = new JButton("OK");
-        OkButton.setBounds(350, 500, 80, 20);
-        jPanel.add(OkButton);
+        createTablePanel();
 
-        getContentPane().add(jPanel, BorderLayout.CENTER);
-        jPanel.setLayout(null);
+        ImageIcon icon = new ImageIcon("src/main/resources/images/contact-book.png");
+        icon.setImage(icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+        mainPanel.add(new JLabel(icon), BorderLayout.WEST); // Ajoute une image à gauche
 
-        table1 = new JTable();
-        table1.setBounds(75, 50, 400, 400);
-        jPanel.add(table1);
+        tablePanel.setBounds(   500, 100, 450,450);
+        mainPanel.add(tablePanel, BorderLayout.CENTER); // Ajoute le panneau avec la JTable au centre
 
-        OkButton.addActionListener(e -> {
-            dispose();
-        });
+        buttonPanel = new JPanel(new BorderLayout()); // Crée un panneau avec un layout BorderLayout
+        okButton.setSize(80,50);
+        buttonPanel.add(okButton, BorderLayout.CENTER); // Ajoute le bouton "Détails" en bas
+
+       // mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Ajoute le bouton "Détails" en bas
+
+        frame.add(mainPanel);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.pack();
+        frame.setVisible(true);
+
+        }
+
+    private void createTablePanel() {
 
 
-    }
+        String[] columnNames = {"id", "name", "number"}; // Noms des colonnes du tableau
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0); // Crée un modèle de tableau par défaut avec les noms de colonnes
+        table = new JTable(tableModel); // Crée une JTable avec le modèle de tableau
+        JScrollPane scrollPane = new JScrollPane(table); // Ajoute une barre de défilement à la JTable
 
-    private JPanel createTablePanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JScrollPane(table1), BorderLayout.CENTER);
-        String[] columnNames = {"Id", "Name", "number"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-        table1 = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table1);
-        OkButton.addActionListener(new ActionListener() {
-            @Override
+        okButton = new JButton("OK"); // Crée un bouton "Détails"
+
+        ContactDao contactDao = new ContactDao();
+        List<Contact> contacts = contactDao.findAll();
+        addToTable(contacts);
+
+        okButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                MainFrame mainFrame = new MainFrame();
-                mainFrame.setVisible(true);
 
             }
         });
-        return panel;
+
+        this.tablePanel.add(scrollPane, BorderLayout.CENTER); // Ajoute la JTable avec barre de défilement au centre
+
 
     }
 
+    private void addToTable(List<Contact> contacts) {
+        // Obtient le modèle de tableau associé à la JTable
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        for (Contact contact : contacts){
+            // Ajoute une nouvelle ligne avec les valeurs spécifiées au modèle de tableau
+            tableModel.addRow(new Object[]{contact.getId(), contact.getName(), contact.getNumber()});
+        }
+
+
+    }
 }

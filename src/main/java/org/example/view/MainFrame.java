@@ -79,14 +79,6 @@ public class MainFrame extends JDialog {
             }
         });
 
-        buttonUpdate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UpdateDialog updateDialog = new UpdateDialog();
-                updateDialog.setVisible(true);
-            }
-        });
-
         buttonSelect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
